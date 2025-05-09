@@ -1,11 +1,162 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=https://www.chatbase.co/chatbot-iframe/13vWpdi9gYUK8DrVhswqL">
-  <title>Reindirizzamento...</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nyra</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0e0e0e;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      color: #e2e2e2;
+    }
+
+    header {
+      padding: 20px;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #ffffff;
+      border-bottom: 1px solid #222;
+    }
+
+    .chat-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .message {
+      max-width: 80%;
+      padding: 15px;
+      border-radius: 15px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .user {
+      align-self: flex-end;
+      background: #b20087;
+      color: #fff;
+      border-bottom-right-radius: 0;
+    }
+
+    .bot {
+      align-self: flex-start;
+      background: #1f1f1f;
+      color: #e2e2e2;
+      border-bottom-left-radius: 0;
+      border: 1px solid #333;
+    }
+
+    .input-area {
+      display: flex;
+      padding: 15px;
+      border-top: 1px solid #222;
+      background: #0d0d0d;
+    }
+
+    .input-area input {
+      flex: 1;
+      padding: 15px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: none;
+      background: #1f1f1f;
+      color: #fff;
+      margin-right: 10px;
+      outline: none;
+    }
+
+    .input-area button {
+      background: #444;
+      border: none;
+      padding: 0 20px;
+      font-weight: bold;
+      font-size: 1rem;
+      border-radius: 10px;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .input-area button:hover {
+      background: #666;
+    }
+  </style>
 </head>
 <body>
-  Se non vieni reindirizzato automaticamente, <a href="https://www.chatbase.co/chatbot-iframe/13vWpdi9gYUK8DrVhswqL">clicca qui</a>.
+  <header>Nyra</header>
+  <div class="chat-container" id="chatContainer"></div>
+  <div class="input-area">
+    <input type="text" id="userInput" placeholder="I tuoi pensieri qui!" onkeydown="if(event.key==='Enter')sendMessage()" />
+    <button onclick="sendMessage()">Invia</button>
+  </div>
+
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById('userInput');
+      const message = input.value.trim();
+      const chat = document.getElementById('chatContainer');
+
+      if (!message) return;
+
+      appendMessage('user', message);
+      input.value = '';
+      scrollToBottom();
+
+      const loadingId = appendMessage('bot', '⏳ Nyra sta pensando...');
+
+      try {
+        const res = await fetch("https://nyra-backend.onrender.com", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ message })
+        });
+
+        const data = await res.json();
+        const reply = data.reply || '❌ Sembra che si sia verificato un errore.';
+        updateMessage(loadingId, marked.parse(reply));
+      } catch (err) {
+        updateMessage(loadingId, `❌ Errore: ${err.message}`);
+      }
+    }
+
+    function appendMessage(role, content) {
+      const chat = document.getElementById('chatContainer');
+      const div = document.createElement('div');
+      const id = 'msg-' + Date.now();
+      div.className = `message ${role}`;
+      div.innerHTML = content;
+      div.id = id;
+      chat.appendChild(div);
+      scrollToBottom();
+      return id;
+    }
+
+    function updateMessage(id, newContent) {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = newContent;
+      scrollToBottom();
+    }
+
+    function scrollToBottom() {
+      const chat = document.getElementById('chatContainer');
+      chat.scrollTop = chat.scrollHeight;
+    }
+  </script>
 </body>
 </html>
