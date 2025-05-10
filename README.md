@@ -27,6 +27,8 @@ Ora che hai incollato il tuo codice, devi modificare alcune cose base per far fu
 4. Integra la tua API Key nel codice e il tuo modello nel codice
 <img src="https://cdn.discordapp.com/attachments/1236018798717571174/1370865278182883328/Screenshot_20250510_224832_Samsung_Notes.jpg?ex=68210d47&is=681fbbc7&hm=f5d82abcd27464a3c8eedeb9cba6a354b245c6a5cfa25f4fdcee1c29fd751221&" alt="imga">
 
+<rh>
+
 **⚠️ NEL CAMPO DOVE INSERIRE IL MODELLO DEVI METTERE IL NOME DEL MODELLO CHE SI TROVA NELLA OVERVIEW DEL MODELLO.
 ESEMPIO:**
 <img src="https://cdn.discordapp.com/attachments/1236018798717571174/1370865960541491383/Screenshot_20250510_225106_Chrome.jpg?ex=68210dea&is=681fbc6a&hm=f092bc6f853982c00eeb1170dbe1197c6e83a01b1e9b79b10b37deb729fe853c&" alt="imgb">
