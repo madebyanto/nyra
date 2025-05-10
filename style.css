@@ -1,0 +1,83 @@
+/* Reset & base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: radial-gradient(ellipse at center, #0a0a0a 0%, #050505 100%);
+  color: #e0e0e0;
+  line-height: 1.6;
+  scroll-behavior: smooth;
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 100px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+}
+.hero .logo {
+  width: 120px;
+  margin-bottom: 20px;
+}
+.hero h1 {
+  font-size: 3rem;
+  color: #00ffe1;
+}
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+.btn {
+  padding: 10px 25px;
+  background: #00ffe1;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
+.btn:hover {
+  background: #00bba8;
+}
+
+/* Sezioni */
+section {
+  padding: 60px 20px;
+  max-width: 800px;
+  margin: auto;
+}
+.about h2, .features h2, .how h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #00ffe1;
+}
+.features ul {
+  list-style: none;
+}
+.features li {
+  margin: 10px 0;
+  font-size: 1.1rem;
+}
+.steps {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+  font-weight: bold;
+  color: #ccc;
+}
+footer {
+  text-align: center;
+  padding: 30px 20px;
+  background: #111;
+  font-size: 0.9rem;
+}
+footer a {
+  color: #00ffe1;
+  text-decoration: none;
+}
