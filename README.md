@@ -41,7 +41,7 @@ Crea un logo, un nome, personalizza l'interfaccia...
 Il team di **Aura Studio** non è responsabile per usi illeciti da parte di distribuzioni non ufficiale. Nyra è un progetto open-sorce per dare buone possibilità a coloro che vogliono creare una AI ambiziosa.
 
 # Crediti e licenza
-**Nyra** è stata sviluppata da <a href="github.com/madebyanto">Anto</a> di **Aura Studio**.
+**Nyra** è stata sviluppata da <a href="https://github.com/madebyanto">Anto</a> di **Aura Studio**.
 
 <hr>
 
