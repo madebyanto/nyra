@@ -1,52 +1,74 @@
-<img src="https://cdn.discordapp.com/attachments/1236018798717571174/1370686108882702356/nyra_logo_nobg.png?ex=6820666a&is=681f14ea&hm=5b9eb87740238393ceeae6e72ea3fd06ad57241c08574a2584eae71371e6800c&" alt="logo">
+
+<img src="https://cdn.discordapp.com/attachments/1236018798717571174/1370686108882702356/nyra_logo_nobg.png?ex=6820666a&is=681f14ea&hm=5b9eb87740238393ceeae6e72ea3fd06ad57241c08574a2584eae71371e6800c&" alt="Nyra Logo">
 
 # Nyra
-Nyra è un'intelligenza artificiale basata su Hermes che ti permette di ricevere informazioni dal web, fare una chiacchierata e motivazionarti a farti passare per la testa nuove idee.
 
-## Open-Source
-Nyra è un'AI <a href="https://it.m.wikipedia.org/wiki/Open_source">open-source</a>, quindi tutti possono prendere il suo codice base e adattarlo alle loro esigenza.
+Nyra è un'intelligenza artificiale basata su Hermes che ti permette di accedere a informazioni dal web, fare conversazioni stimolanti e trovare motivazione per sviluppare nuove idee. Che tu voglia fare domande o semplicemente chiacchierare, Nyra è qui per te!
 
-# Voglio creare la mia AI basata su Nyra
-Ottimo! Allora qui troverai una serie di istruzioni per creare la tua AI basata su Nyra! È 100% gratuito, basta avere un pò di conoscenza con l'informatica!
+## Open Source
 
-## 1. Apri un progetto
-Puoi usare un'IDE di sviluppo come <a href="https://code.visualstudio.com/">Visual Studio Code</a>, oppure direttamente in locale sul tuo PC.
+Nyra è un progetto **open-source**. Puoi liberamente esplorare, modificare e adattare il suo codice base alle tue esigenze. Per saperne di più su cosa significa open-source, visita [questa pagina su Wikipedia](https://it.m.wikipedia.org/wiki/Open_source).
 
-## 2. Incolla il codice base
-<a href="https://github.com/madebyanto/nyra/releases/download/nyraaltopensource/nyra_alt_code.txt">Incolla questo intero codice che puoi installare qui</a>
+## Crea la tua AI con Nyra
 
-## 3. Modifica
-Ora che hai incollato il tuo codice, devi modificare alcune cose base per far funzionare la tua nuova AI, cioè:
-• Mettere la tua API Key
-• Mettere il tuo modello
+Se vuoi creare una versione personalizzata di Nyra, sei nel posto giusto! Il processo è semplice e gratuito. Ti basta avere una conoscenza di base dell'informatica e seguire questi passaggi.
 
-### Come fare
-1. Vai su <a href="https://openrouter.ai">OpenRouter</a> e crea un account.
-2. Crea un <a href="https://openrouter.ai/settings/keys">API Key</a>
-3. Scegli un <a href="https://openrouter.ai/models?max_price=0">modello gratuito</a> 
-4. Integra la tua API Key nel codice e il tuo modello nel codice
-<img src="https://cdn.discordapp.com/attachments/1236018798717571174/1370865278182883328/Screenshot_20250510_224832_Samsung_Notes.jpg?ex=68210d47&is=681fbbc7&hm=f5d82abcd27464a3c8eedeb9cba6a354b245c6a5cfa25f4fdcee1c29fd751221&" alt="imga">
+### 1. Crea un progetto
 
-<hr>
+Inizia creando un nuovo progetto in un IDE a tua scelta, come [Visual Studio Code](https://code.visualstudio.com/), o lavorando direttamente sul tuo PC.
 
-**⚠️ NEL CAMPO DOVE INSERIRE IL MODELLO DEVI METTERE IL NOME DEL MODELLO CHE SI TROVA NELLA OVERVIEW DEL MODELLO.
-ESEMPIO:**
-<img src="https://cdn.discordapp.com/attachments/1236018798717571174/1370865960541491383/Screenshot_20250510_225106_Chrome.jpg?ex=68210dea&is=681fbc6a&hm=f092bc6f853982c00eeb1170dbe1197c6e83a01b1e9b79b10b37deb729fe853c&" alt="imgb">
+### 2. Incolla il codice base
 
-# 4. Personalizza
-La tua AI è pronta a livello funzionale. Ora, con un tocco di HTML, CSS e JS, personalizzala come meglio ti piace;
-Crea un logo, un nome, personalizza l'interfaccia...
+Scarica il codice base di Nyra dal link qui sotto e incollalo nel tuo progetto:
 
-# NOTE!
-Il team di **Aura Studio** non è responsabile per usi illeciti da parte di distribuzioni non ufficiale. Nyra è un progetto open-sorce per dare buone possibilità a coloro che vogliono creare una AI ambiziosa.
+[Scarica il codice base di Nyra](https://github.com/madebyanto/nyra/releases/download/nyraaltopensource/nyra_alt_code.txt)
 
-# Crediti e licenza
-**Nyra** è stata sviluppata da <a href="https://github.com/madebyanto">Anto</a> di **Aura Studio**.
+### 3. Modifica il codice
 
-<hr>
+Per far funzionare correttamente la tua nuova AI, dovrai modificare alcune impostazioni di base, come ad esempio:
 
-**Nyra** è un progetto appartenente ad **Aura Studio**.
+- Inserire la tua **API Key**
+- Scegliere un **modello AI**
 
-<hr>
+#### Come fare:
 
-Le distribuzioni non ufficiali  (**AI Nyra-based**) di Nyra non sono appartenenti da **Aura Studio**, e **Aura Studio** non è responsabile di quest'ultime.
+1. Vai su [OpenRouter](https://openrouter.ai) e crea un account.
+2. Genera una [API Key](https://openrouter.ai/settings/keys).
+3. Scegli un [modello gratuito](https://openrouter.ai/models?max_price=0).
+4. Integra la tua **API Key** e il nome del **modello** nel codice.
+
+![Screenshot delle modifiche da fare](https://cdn.discordapp.com/attachments/1236018798717571174/1370865278182883328/Screenshot_20250510_224832_Samsung_Notes.jpg?ex=68210d47&is=681fbbc7&hm=f5d82abcd27464a3c8eedeb9cba6a354b245c6a5cfa25f4fdcee1c29fd751221&)
+
+---
+
+**⚠️ IMPORTANTE:**  
+Quando inserisci il nome del modello, assicurati di utilizzare il nome esatto che trovi nella "Overview" del modello su OpenRouter.  
+Esempio:
+
+![Esempio di nome modello](https://cdn.discordapp.com/attachments/1236018798717571174/1370865960541491383/Screenshot_20250510_225106_Chrome.jpg?ex=68210dea&is=681fbc6a&hm=f092bc6f853982c00eeb1170dbe1197c6e83a01b1e9b79b10b37deb729fe853c&)
+
+### 4. Personalizza la tua AI
+
+La parte funzionale della tua AI è pronta! Ora puoi aggiungere il tuo tocco personale. Personalizza Nyra con un logo, un nome, e modifica l'interfaccia utente usando **HTML**, **CSS** e **JavaScript**.
+
+### 5. Buona fortuna!
+
+Ora che hai la tua AI personalizzata, puoi usarla come vuoi. Fai in modo che Nyra rispecchi la tua visione, sia che si tratti di un assistente virtuale, di un bot motivazionale o di un sistema di risposte intelligenti!
+
+---
+
+## Note
+
+Il team di **Aura Studio** non è responsabile per l'uso illecito o non autorizzato delle distribuzioni non ufficiali di Nyra. Nyra è un progetto open-source pensato per dare opportunità a chi vuole sviluppare un'AI potente e ambiziosa.
+
+## Crediti e licenza
+
+**Nyra** è stata sviluppata da [Anto](https://github.com/madebyanto) di **Aura Studio**.
+
+---
+
+**Nyra** è un progetto che appartiene a **Aura Studio**.
+
+---
+
+Le distribuzioni non ufficiali (ad esempio, quelle basate su Nyra) non sono affiliate con **Aura Studio**, e **Aura Studio** non è responsabile per queste versioni non ufficiali.
