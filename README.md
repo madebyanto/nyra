@@ -1,5 +1,5 @@
 
-<img src="https://cdn.discordapp.com/attachments/1236018798717571174/1370686108882702356/nyra_logo_nobg.png?ex=6820666a&is=681f14ea&hm=5b9eb87740238393ceeae6e72ea3fd06ad57241c08574a2584eae71371e6800c&" alt="Nyra Logo">
+<img src="nyra_logo_nobg.png" alt="Nyra Logo">
 
 # Nyra
 
