@@ -1,5 +1,5 @@
 
-<img src="nyra_logo_nobg.png" alt="Nyra Logo">
+<img src="nyra.png" alt="Nyra Logo">
 
 # Nyra
 
