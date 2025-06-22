@@ -37,15 +37,15 @@ Per far funzionare correttamente la tua nuova AI, dovrai modificare alcune impos
 3. Scegli un [modello gratuito](https://openrouter.ai/models?max_price=0).
 4. Integra la tua **API Key** e il nome del **modello** nel codice.
 
-![Screenshot delle modifiche da fare](https://cdn.discordapp.com/attachments/1236018798717571174/1370865278182883328/Screenshot_20250510_224832_Samsung_Notes.jpg?ex=68210d47&is=681fbbc7&hm=f5d82abcd27464a3c8eedeb9cba6a354b245c6a5cfa25f4fdcee1c29fd751221&)
+**Modifiche da fare:**
+<img src="modifiche_da_fare.jpg" alt="Img1">
 
 ---
 
 **⚠️ IMPORTANTE:**  
 Quando inserisci il nome del modello, assicurati di utilizzare il nome esatto che trovi nella "Overview" del modello su OpenRouter.  
-Esempio:
-
-![Esempio di nome modello](https://cdn.discordapp.com/attachments/1236018798717571174/1370865960541491383/Screenshot_20250510_225106_Chrome.jpg?ex=68210dea&is=681fbc6a&hm=f092bc6f853982c00eeb1170dbe1197c6e83a01b1e9b79b10b37deb729fe853c&)
+**Esempio:**
+<img src="es_nome_modello.png" alt="Img2">
 
 ### 4. Personalizza la tua AI
 
