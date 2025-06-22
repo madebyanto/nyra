@@ -1,5 +1,6 @@
 
 <img src="nyra_banner.png" alt="Nyra Logo">
+
 # Crea la tua AI basata su Nyra
 
 Nyra è un'intelligenza artificiale basata su **Deepseek R1** che ti permette di accedere a informazioni dal web, fare conversazioni stimolanti e trovare motivazione per sviluppare nuove idee. Che tu voglia fare domande o semplicemente chiacchierare, Nyra è qui per te!
