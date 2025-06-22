@@ -45,7 +45,7 @@ Per far funzionare correttamente la tua nuova AI, dovrai modificare alcune impos
 **⚠️ IMPORTANTE:**  
 Quando inserisci il nome del modello, assicurati di utilizzare il nome esatto che trovi nella "Overview" del modello su OpenRouter.  
 **Esempio:**
-<img src="es_nome_modello.png" alt="Img2">
+<img src="es_nome_modello.jpg" alt="Img2">
 
 ### 4. Personalizza la tua AI
 
