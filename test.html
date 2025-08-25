@@ -11,38 +11,38 @@
 </head>
 <body>
 
-<h1>Test Nyra API</h1>
+<h1>Test Nyra API v2</h1>
 <input type="text" id="msg" placeholder="Scrivi a Nyra...">
 <button onclick="sendMessage()">Invia</button>
 
 <div id="response"></div>
 
 <script>
-async function sendMessage() {
-    const message = document.getElementById("msg").value;
-    const responseDiv = document.getElementById("response");
-    responseDiv.textContent = "Sto caricando...";
+async function inviaMessaggio() {
+  const msg = document.getElementById("inputMsg").value;
+  const output = document.getElementById("output");
+
+  try {
+    const response = await fetch("https://api.nyra.aurastudioitalia.it/nyra", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: msg })
+    });
+
+    const text = await response.text();
 
     try {
-        const res = await fetch("https://api.nyra.aurastudioitalia.it/nyra", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message })
-        });
-
-        const data = await res.json();
-
-        if (data.response) {
-            responseDiv.textContent = "Nyra: " + data.response;
-        } else if (data.error) {
-            responseDiv.textContent = "Errore server: " + data.error;
-        } else {
-            responseDiv.textContent = "Risposta non valida dal server.";
-        }
-    } catch (err) {
-        console.error(err);
-        responseDiv.textContent = "Errore di connessione: " + err.message;
+      // prova a fare il parse JSON
+      const data = JSON.parse(text);
+      output.innerText = data.response || JSON.stringify(data.raw, null, 2);
+    } catch {
+      // se non è JSON, mostra il testo ricevuto
+      output.innerText = text;
     }
+
+  } catch (err) {
+    output.innerText = "Errore server: " + err.message;
+  }
 }
 </script>
 
