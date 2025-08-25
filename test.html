@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<body>
+<input id="msg" placeholder="Scrivi a Nyra">
+<button onclick="sendMessage()">Invia</button>
+
+<script>
+async function sendMessage() {
+  const message = document.getElementById("msg").value;
+  const res = await fetch("https://api.nyra.aurastudioitalia.it/nyra", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message })
+  });
+  const data = await res.json();
+  alert(data.response);
+}
+</script>
+</body>
+</html>
