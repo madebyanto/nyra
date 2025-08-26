@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nyra</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            color: #e2e2e2;
+            overflow: hidden;
+        }
+
+        .file-upload-label {
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.2s ease;
+        }
+
+        .file-upload-label:hover {
+            background-color: rgba(100, 65, 165, 0.2);
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        #filePreviewContainer {
+            display: none;
+            flex-wrap: wrap;
+            padding: 5px;
+            margin-bottom: 5px;
+            border-radius: 10px;
+            background-color: #1f1f1f;
+        }
+
+        #filePreviewContainer.visible {
+            display: flex;
+        }
+
+        .file-preview {
+            position: relative;
+            margin-right: 10px;
+            margin-bottom: 5px;
+        }
+
+        .file-preview img {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 8px;
+        }
+
+        .file-preview .file-name {
+            display: block;
+            font-size: 0.8rem;
+            color: #8e8e93;
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-top: 5px;
+        }
+
+        .file-preview .remove-file {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #b20087;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .color-background-effect {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 300px;
+            background: radial-gradient(
+                circle at 50% 120%, 
+                rgba(255, 0, 255, 1) 0%,   /* Magenta */
+                rgba(142, 45, 226, 1) 50%,  /* Viola */
+                rgba(0, 191, 255, 1) 100%   /* Azzurro */
+            );
+            transparent 100%
+            );
+            filter: blur(80px);
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 3s ease-in-out;
+        }
+
+        .color-background-effect.fade-in {
+            opacity: 1;
+        }
+
+        header {
+            padding: 10px 15px;
+            text-align: center;
+            background-color: #000;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+            box-sizing: border-box;
+            border-bottom: 1px solid #1a1a1a;
+            position: relative;
+        }
+
+        header .left-section,
+        header .right-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        header .back-arrow {
+            font-size: 1.8rem;
+            color: #fff;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        header .center-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 1;
+            position: relative;
+        }
+
+        header .main-title {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        header .dropdown {
+            display: flex;
+            align-items: center;
+            background: #1f1f1f;
+            border-radius: 12px;
+            padding: 4px 10px;
+            color: #8e8e93;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-top: 2px;
+        }
+
+        header .dropdown .material-icons {
+            font-size: 1rem;
+            margin-left: 4px;
+        }
+
+        header .profile-pic {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-left: 5px;
+        }
+
+        #menuButton {
+            display: none;
+        }
+
+        #modelDropdown {
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #262626;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            padding: 8px 0;
+            min-width: 180px;
+            z-index: 100;
+            display: none;
+            text-align: left;
+        }
+
+        #modelDropdown.active {
+            display: block;
+        }
+
+        #modelDropdown p {
+            color: #8e8e93;
+            font-size: 0.85rem;
+            padding: 5px 15px;
+            margin: 0;
+            border-bottom: 1px solid #333;
+        }
+
+        #modelDropdown ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #modelDropdown li {
+            padding: 10px 15px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            color: #e2e2e2;
+            transition: background-color 0.2s ease;
+        }
+
+        #modelDropdown li:hover {
+            background-color: #333;
+        }
+
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100%;
+            background: #000;
+            border-right: 1px solid #1a1a1a;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 999;
+            overflow-y: auto;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #sidebar.active {
+            transform: translateX(0);
+        }
+
+        .sidebar-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            margin: 10px auto 5px;
+            background: #b20087;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            box-sizing: border-box;
+            text-align: center;
+            transition: background 0.2s ease;
+            gap: 8px;
+            min-width: 180px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+        }
+
+        .sidebar-button:hover {
+            background: #9a0075;
+        }
+
+        #chatList {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+            margin-top: 10px;
+        }
+
+        #sidebar li {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #1a1a1a;
+            cursor: pointer;
+            color: #e2e2e2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            position: relative;
+            transition: background 0.2s ease;
+        }
+
+        #sidebar li:hover {
+            background: #1a1a1a;
+        }
+
+        #sidebar li.active {
+            background-color: #262626;
+        }
+
+        #sidebar li .chat-title-text {
+            flex-grow: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-bottom: 80px;
+        }
+
+        .message-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-label {
+            font-size: 0.8rem;
+            color: #8e8e93;
+            margin-bottom: 4px;
+            padding-left: 5px;
+        }
+
+        .message-block.user-block .message-label {
+            align-self: flex-end;
+            margin-right: 5px;
+        }
+
+        .message-block.bot-block .message-label {
+            align-self: flex-start;
+            margin-left: 5px;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-break: break-word;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .user {
+            align-self: flex-end;
+            background: #262626;
+            color: #fff;
+            border-radius: 18px;
+            margin-right: 5px;
+        }
+
+        .bot {
+            align-self: flex-start;
+            background: #262626;
+            color: #e2e2e2;
+            border-radius: 18px;
+            margin-left: 5px;
+        }
+
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.animate {
+            animation: fadeInSlideUp 0.3s ease-out forwards;
+        }
+
+        .welcome-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: transparent;
+        }
+
+        .welcome-container h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .welcome-container p {
+            font-size: 1.1rem;
+            color: #ffffff;
+        }
+
+        .input-area {
+            display: flex;
+            flex-direction: column;
+            padding: 8px 15px;
+            background: #000;
+            gap: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-sizing: border-box;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        .input-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-controls input {
+            flex: 1;
+            padding: 12px 15px;
+            font-size: 0.95rem;
+            border-radius: 25px;
+            border: none;
+            background: #1f1f1f;
+            color: #fff;
+            margin-right: 0;
+            outline: none;
+        }
+
+        .input-controls .icon-button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.6rem;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            transition: 0.1s;
+        }
+
+        .input-controls .icon-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .input-controls .icon-button.highlight {
+            background: #00ff7f;
+            color: #000;
+        }
+       
+        .copy-button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        .copy-button:hover {
+            background-color: #555;
+        }
+
+        .copy-button .material-icons {
+            font-size: 1rem;
+        }
+
+        /* INIZIO STILI AGGIUNTI */
+        .message-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 5px;
+            align-self: flex-start;
+        }
+
+        .report-button {
+            background-color: #4a2a2a;
+            color: #ffc4c4;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .report-button:hover {
+            background-color: #6d3f3f;
+        }
+        
+        .report-button .material-icons {
+            font-size: 1rem;
+        }
+
+        .report-button:disabled {
+            background-color: #2a4a3a;
+            color: #c4ffdd;
+            cursor: not-allowed;
+        }
+
+        /* STILI PER EFFETTO PAROLA-PER-PAROLA */
+        .word {
+            opacity: 0;
+            transform: translateY(6px);
+            display: inline-block;
+            transition: opacity 220ms ease, transform 220ms ease;
+            white-space: pre;
+        }
+        .word.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* FINE STILI AGGIUNTI */
+
+        .whatsapp-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .whatsapp-popup-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .whatsapp-popup {
+            background-color: #262626;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            max-width: 350px;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .whatsapp-popup-overlay.show .whatsapp-popup {
+            transform: scale(1);
+        }
+
+        .whatsapp-popup h2 {
+            color: #fff;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .whatsapp-popup p {
+            color: #e2e2e2;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .whatsapp-popup-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .whatsapp-popup-buttons button,
+        .whatsapp-popup-buttons a {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .whatsapp-popup-buttons .close-button {
+            background-color: #333;
+            color: #e2e2e2;
+        }
+
+        .whatsapp-popup-buttons .close-button:hover {
+            background-color: #555;
+        }
+
+        .whatsapp-popup-buttons .join-button {
+            background-color: #25d366;
+            color: #fff;
+        }
+
+        .whatsapp-popup-buttons .join-button:hover {
+            background-color: #1da851;
+        }
+
+        /* POPUP D'AVVISO (TERAPIA) - stile uguale al whatsapp popup */
+        .warning-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1100; /* sopra whatsapp popup */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .warning-popup-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .warning-popup {
+            background-color: #262626;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            max-width: 420px;
+            transform: scale(0.95);
+            transition: transform 0.25s ease;
+        }
+        .warning-popup-overlay.show .warning-popup {
+            transform: scale(1);
+        }
+        .warning-popup h2 {
+            color: #fff;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .warning-popup p {
+            color: #e2e2e2;
+            font-size: 0.95rem;
+            line-height: 1.45;
+            margin-bottom: 18px;
+        }
+        .warning-popup .warning-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+        .warning-popup .ack-button {
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: none;
+            background: #b20087;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+            .message {
+                max-width: 85%;
+            }
+            header .main-title {
+                font-size: 1rem;
+            }
+            header .dropdown {
+                font-size: 0.7rem;
+            }
+            header .profile-pic {
+                width: 28px;
+                height: 28px;
+            }
+            .whatsapp-popup {
+                margin: 0 15px;
+                padding: 20px;
+            }
+            .whatsapp-popup h2 {
+                font-size: 1.3rem;
+            }
+            .whatsapp-popup p {
+                font-size: 0.9rem;
+            }
+            .whatsapp-popup-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .warning-popup {
+                margin: 0 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="color-background-effect" id="colorBackgroundEffect"></div>
+
+    <div class="whatsapp-popup-overlay" id="whatsappPopupOverlay">
+        <div class="whatsapp-popup">
+            <h2>Abbiamo aperto il canale WhatsApp di Nyra!</h2>
+            <p>Unisciti per le news, sondaggi, anteprime e forse regali.. 👀</p>
+            <div class="whatsapp-popup-buttons">
+                <button class="close-button" onclick="closeWhatsappPopup()">Chiudi</button>
+                <a href="https://whatsapp.com/channel/0029Vb62kCUBvvsoDtruRy28" target="_blank" class="join-button">Unisciti</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="warning-popup-overlay" id="warningPopupOverlay" aria-hidden="true">
+        <div class="warning-popup" role="dialog" aria-labelledby="warningTitle">
+            <h2 id="warningTitle">Avviso importante</h2>
+            <p>
+                Nyra non è una terapeuta né un sostituto del supporto umano professionale.
+                Se stai affrontando pensieri di autolesionismo, crisi o emergenze emotive, ti invitiamo a rivolgerti a un professionista sanitario o a un servizio di emergenza locale.
+            </p>
+            <p>
+                Nyra può commettere errori — per informazioni importanti verifica sempre la fonte e, se necessario, consulta professionisti qualificati.
+            </p>
+            <div class="warning-buttons">
+                <button class="ack-button" onclick="closeWarningPopup()">Ho capito</button>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <div class="left-section">
+            <i class="material-icons back-arrow" onclick="toggleSidebar()">keyboard_arrow_left</i>
+        </div>
+        
+        <div class="center-section">
+            <div class="main-title">Nyra</div>
+            <div class="dropdown" id="modelDropdownToggle" onclick="toggleModelDropdown()">
+                <span id="selectedModelName">GPT 5 Nano</span> <i class="material-icons">keyboard_arrow_down</i>
+            </div>
+            <div id="modelDropdown">
+                <p>Scegli il tuo modello</p>
+                <ul>
+                    <li data-model="openai/gpt-5-nano" onclick="selectModel('GPT 5 Nano', 'openai/gpt-5-nano')">GPT 5 Nano</li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div id="sidebar">
+        <a id="settingsLink" href="settings.html" class="sidebar-button">
+            <span class="material-symbols-outlined">settings</span>
+            Impostazioni
+        </a>
+        <button id="newChatButton" onclick="newChat()" class="sidebar-button">
+            <span class="material-symbols-outlined">edit_square</span>
+            Nuova Chat
+        </button>
+        <ul id="chatList"></ul>
+    </div>
+
+    <div class="chat-container" id="chatContainer">
+        <div class="welcome-container" 
+        id="welcomeMessage">
+            <h1>GPT-5 su Nyra</h1>
+            <p>Ti presentiamo GPT-5 su Nyra, per<br>risposte rapide e intelligenti.</p>
+        </div>
+    </div>
+
+    <div class="input-area">
+        <div id="filePreviewContainer"></div>
+        <div class="input-controls">
+            <label for="fileInput" class="file-upload-label">
+                <i 
+                class="material-icons">attach_file</i>
+            </label>
+            <input type="file" id="fileInput" multiple accept="image/*,.txt,.csv,.md,.pdf">
+            <input type="text" id="userInput" placeholder="Invia un messaggio..." onkeydown=" if(event.key === 'Enter') sendMessage()">
+            <button id="sendButton" class="icon-button highlight" onclick="sendMessage()"><i class="material-icons">send</i></button>
+        </div>
+    </div>
+
+    <script>
+        let chats = [];
+        let currentChatIndex = 0;
+        let loadingMessageElement = null;
+        let currentModel = {
+            name: "GPT 5 nano",
+            id: "openai/gpt-5-nano"
+        };
+        let isProcessing = false;
+        let attachedFiles = [];
+
+        document.getElementById('fileInput').addEventListener('change', handleFileChange);
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+            closeAllDropdowns();
+        }
+
+        function toggleModelDropdown() {
+            document.getElementById('modelDropdown').classList.toggle('active');
+        }
+
+        function selectModel(modelName, modelId) {
+            currentModel.name = modelName;
+            currentModel.id = modelId;
+            document.getElementById('selectedModelName').textContent = modelName;
+            toggleModelDropdown();
+            console.log(`Modello selezionato: ${currentModel.name} (${currentModel.id})`);
+        }
+
+        function closeAllDropdowns(event) {
+            const sidebar = document.getElementById('sidebar');
+            const backArrow = document.querySelector('.back-arrow');
+            const modelDropdown = document.getElementById('modelDropdown');
+            const modelDropdownToggle = document.getElementById('modelDropdownToggle');
+            if (sidebar.classList.contains('active') && event && !sidebar.contains(event.target) && !backArrow.contains(event.target)) {
+                sidebar.classList.remove('active');
+            }
+
+            if (modelDropdown.classList.contains('active') && event && !modelDropdown.contains(event.target) && !modelDropdownToggle.contains(event.target)) {
+                modelDropdown.classList.remove('active');
+            }
+        }
+
+        document.addEventListener('click', closeAllDropdowns);
+        function saveChats() {
+            localStorage.setItem("nyraChats", JSON.stringify(chats));
+            localStorage.setItem("nyraCurrentModel", JSON.stringify(currentModel));
+        }
+
+        function loadChats() {
+            const savedChats = localStorage.getItem("nyraChats");
+            const savedModel = localStorage.getItem("nyraCurrentModel");
+
+            if (savedChats) {
+                chats = JSON.parse(savedChats);
+            } else {
+                chats = [];
+            }
+            
+            currentChatIndex = 0;
+            if (savedModel) {
+                currentModel = JSON.parse(savedModel);
+                document.getElementById('selectedModelName').textContent = currentModel.name;
+            } else {
+                currentModel = {
+                    name: "GPT 5 Nano",
+                    id: "openai/gpt-5-nano"
+                };
+                document.getElementById('selectedModelName').textContent = currentModel.name;
+            }
+
+            newChat(false);
+        }
+
+        function updateChatList() {
+            const list = document.getElementById('chatList');
+            list.innerHTML = '';
+
+            const sortedChats = [...chats].sort((a, b) => {
+                const aPinned = a.isPinned || false;
+                const bPinned = b.isPinned || false;
+                return bPinned - aPinned;
+            });
+            sortedChats.forEach((chat, index) => {
+                const originalIndex = chats.indexOf(chat);
+                const firstUserMsg = Array.isArray(chat) ? chat.find(msg => msg.role === 'user') : null;
+                const chatTitle = firstUserMsg ? firstUserMsg.content.slice(0, 25) + (firstUserMsg.content.length > 25 ? '...' : '') : 'Nuova Chat';
+                
+  
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span class="chat-title-text">${chatTitle}</span>
+                `;
+                
+            
+                li.onclick = () => {
+                    // PULIZIA: se la chat corrente è vuota -> rimuovila prima di cambiare
+                    const oldIndex = currentChatIndex;
+                    if (typeof oldIndex === 'number' && chats[oldIndex] && chats[oldIndex].length === 0 && oldIndex !== originalIndex) {
+  
+                        // rimuovi la chat vuota
+                        chats.splice(oldIndex, 1);
+                        // se la chat rimossa è prima dell'indice target, l'indice target diminuisce
+              
+                        if (oldIndex < originalIndex) {
+                            currentChatIndex = originalIndex - 1;
+                        } else {
+                            currentChatIndex = originalIndex;
+                        }
+                        // Aggiorna la lista e reinvia la selezione visiva
+                        updateChatList();
+                        // Dopo update, dobbiamo trovare il <li> corretto e marcare active;
+                        // ma qui rifacciamo il comportamento normale:
+                        // Imposta nuovo indice in modo sicuro
+                    } else {
+                        currentChatIndex = originalIndex;
+                    }
+
+                    const currentActiveLi = document.querySelector('#chatList li.active');
+                    if (currentActiveLi) {
+                        currentActiveLi.classList.remove('active');
+                    }
+
+                    // assicurati che l'elemento li attuale venga marcato active
+                    li.classList.add('active');
+                    renderCurrentChat();
+                    saveChats();
+                    toggleSidebar();
+                };
+                list.appendChild(li);
+            });
+        }
+
+        function newChat(closeSidebar = true) {
+            chats.unshift([]);
+            currentChatIndex = 0;
+            updateChatList();
+            renderCurrentChat();
+            saveChats();
+            if (closeSidebar) {
+                toggleSidebar();
+            }
+        }
+
+        function renderCurrentChat() {
+            const chatContainer = document.getElementById('chatContainer');
+            chatContainer.innerHTML = '';
+            const currentChat = chats[currentChatIndex];
+            
+            const welcomeMessageDiv = document.createElement('div');
+            welcomeMessageDiv.className = 'welcome-container';
+            welcomeMessageDiv.id = 'welcomeMessage';
+            welcomeMessageDiv.innerHTML = '<h1>GPT-5 su Nyra</h1><p>Ti presentiamo GPT-5 su Nyra, per<br>risposte rapide e intelligenti.</p>';
+            chatContainer.appendChild(welcomeMessageDiv);
+            if (currentChat && currentChat.length > 0) {
+                welcomeMessageDiv.style.display = 'none';
+                currentChat.forEach(msg => {
+                    // normalizziamo ruoli: 'assistant' viene trattato come 'bot' per la UI
+                    const displayRole = (msg.role === 'assistant') ? 'bot' : msg.role;
+                    appendMessage(displayRole, msg.content, false);
+                });
+            } else {
+                welcomeMessageDiv.style.display = 'flex';
+            }
+            scrollToBottom();
+        }
+
+        function copyResponse(button) {
+            const messageBlock = button.closest('.message-block');
+            const messageDiv = messageBlock.querySelector('.message');
+            if (!messageDiv) return;
+
+            const textToCopy = messageDiv.innerText.trim();
+            if (!textToCopy) return;
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    button.textContent = 'Copiato!';
+                    setTimeout(() => {
+                        button.innerHTML = '<i class="material-icons">content_copy</i> Copia';
+          
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error("Errore copia:", err);
+                });
+        }
+        
+        // INIZIO FUNZIONI AGGIUNTE
+        async function reportMessage(button) {
+            const messageBlock = button.closest('.message-block');
+            const messageDiv = messageBlock.querySelector('.message');
+            if (!messageDiv) return;
+
+            const messageToReport = messageDiv.innerText.trim();
+            const timestamp = new Date().toISOString();
+            const reportUrl = 'https://script.google.com/macros/s/AKfycbwtD3lb_ZXU91xK9gBfO0Z4wHmwF1ZtAMjli96IwQ2l_BibQBLlOX7s1EAZXNN2gfFoiQ/exec';
+            // Disabilita il pulsante per prevenire invii multipli
+            button.disabled = true;
+            button.innerHTML = '<i class="material-icons">autorenew</i> Invio...';
+
+            const formData = new FormData();
+            formData.append('timestamp', timestamp);
+            formData.append('message', messageToReport);
+            try {
+                const response = await fetch(reportUrl, {
+                    method: 'POST',
+                    body: formData,
+                });
+                if (response.ok) {
+                    button.innerHTML = '<i class="material-icons">check</i> Segnalato!';
+                } else {
+                    button.innerHTML = '<i class="material-icons">error</i> Errore';
+                    console.error('La segnalazione è fallita con stato:', response.status);
+                }
+            } catch (err) {
+                console.error("Errore durante l'invio della segnalazione:", err);
+                button.innerHTML = '<i class="material-icons">error</i> Errore';
+            }
+        }
+        
+        function addActionButtons(messageBlock) {
+            const existingActions = messageBlock.querySelector('.message-actions');
+            if (existingActions) {
+                existingActions.remove();
+            }
+
+            const actionsContainer = document.createElement('div');
+            actionsContainer.className = 'message-actions';
+            // Pulsante Copia
+            const copyButton = document.createElement('button');
+            copyButton.className = 'copy-button';
+            copyButton.innerHTML = '<i class="material-icons">content_copy</i> Copia';
+            copyButton.onclick = () => copyResponse(copyButton);
+            // Pulsante Segnala
+            const reportButton = document.createElement('button');
+            reportButton.className = 'report-button';
+            reportButton.innerHTML = '<i class="material-icons">flag</i> Segnala';
+            reportButton.onclick = () => reportMessage(reportButton);
+
+            actionsContainer.appendChild(copyButton);
+            actionsContainer.appendChild(reportButton);
+            messageBlock.appendChild(actionsContainer);
+        }
+        // FINE FUNZIONI AGGIUNTI
+
+        // FUNZIONE appendMessage MODIFICATA
+        function appendMessage(role, content, scroll = true) {
+            const chat = document.getElementById('chatContainer');
+            const welcomeMessageDiv = document.getElementById('welcomeMessage');
+            if (welcomeMessageDiv) {
+                welcomeMessageDiv.style.display = 'none';
+            }
+
+            const messageBlock = document.createElement('div');
+            messageBlock.className = `message-block ${role}-block`;
+            const label = document.createElement('div');
+            label.className = 'message-label';
+            label.textContent = role === 'user' ? 'You' : 'Nyra';
+            messageBlock.appendChild(label);
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
+            // nota: per i messaggi del bot USER-CREATED (non caricamento) usiamo parsed markdown
+            if ((role === 'bot' || role === 'assistant') && content.trim() !== '🧠 Nyra sta pensando...') {
+                // se il messaggio proviene dalla cronologia, mostrane il contenuto (render markdown)
+                try {
+         
+                    messageDiv.innerHTML = marked.parse(content);
+                } catch (e) {
+                    messageDiv.textContent = content;
+                }
+            } else {
+                // altrimenti per user e loading manteniamo testo semplice
+                messageDiv.innerHTML = content;
+            }
+
+            if (scroll) {
+                messageDiv.classList.add('animate');
+            }
+
+            messageBlock.appendChild(messageDiv);
+            chat.appendChild(messageBlock);
+            // Se è un messaggio del bot (non di caricamento), aggiungi i pulsanti di azione
+            if ((role === 'bot' || role === 'assistant') && content.trim() !== '🧠 Nyra sta pensando...') {
+                addActionButtons(messageBlock);
+            }
+
+            if (scroll) {
+                scrollToBottom();
+            }
+            return messageDiv;
+        }
+        
+        function scrollToBottom() {
+            const chat = document.getElementById('chatContainer');
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function removeFile(file) {
+            attachedFiles = attachedFiles.filter(f => f !== file);
+            handleFileChange();
+        }
+        
+        function handleFileChange() {
+            const fileInput = document.getElementById('fileInput');
+            const newFiles = Array.from(fileInput.files);
+            attachedFiles = newFiles.slice(0, 10);
+            
+            const previewContainer = document.getElementById('filePreviewContainer');
+            previewContainer.innerHTML = '';
+            if (attachedFiles.length > 0) {
+                previewContainer.classList.add('visible');
+                attachedFiles.forEach(file => {
+                    const previewDiv = document.createElement('div');
+                    previewDiv.className = 'file-preview';
+                    
+                    const removeButton = document.createElement('button');
+          
+                    removeButton.className = 'remove-file';
+                    removeButton.textContent = 'x';
+                    removeButton.onclick = (event) => {
+                        event.stopPropagation();
+                  
+                        removeFile(file);
+                    };
+                    
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+    
+                        reader.onload = e => {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+               
+                            previewDiv.appendChild(img);
+                            previewDiv.appendChild(removeButton);
+                            previewContainer.appendChild(previewDiv);
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        const fileInfo = document.createElement('span');
+                        fileInfo.className = 'file-name';
+                        fileInfo.textContent = file.name;
+                        previewDiv.appendChild(fileInfo);
+                        previewDiv.appendChild(removeButton);
+                        previewContainer.appendChild(previewDiv);
+                    }
+                });
+            } else {
+                previewContainer.classList.remove('visible');
+            }
+        }
+    
+        function setInputEnabled(enabled) {
+            const input = document.getElementById('userInput');
+            const sendButton = document.getElementById('sendButton');
+            const fileInput = document.getElementById('fileInput');
+
+            input.disabled = !enabled;
+            sendButton.disabled = !enabled;
+            fileInput.disabled = !enabled;
+            if (enabled) {
+                sendButton.classList.add('highlight');
+            } else {
+                sendButton.classList.remove('highlight');
+            }
+        }
+
+        // Funzione: scrive parola per parola con dissolvenza
+        // element: elemento DOM (div.message) dove mostrare il testo
+        // text: stringa testuale (non HTML)
+        // options: { wordsPerStep, delay } - default: 1 word every 60ms
+        function typeOutByWord(element, text, options = {}) {
+            const wordsPerStep = 
+            options.wordsPerStep || 1;
+            const delay = options.delay || 60; // ms per step
+            return new Promise((resolve) => {
+                // pulisci contenuto
+                element.innerHTML = '';
+                // split preservando spazi multipli e newline: usiamo regex che cattura parole e spazi
+       
+                const tokens = text.split(/(\s+)/); // include spazi come tokens
+                // Creiamo uno span per ogni token non-spazio, e testo normale per gli spazi
+                const spans = [];
+                for (let i = 0; i < tokens.length; i++) {
+          
+                    const token = tokens[i];
+                    if (token.trim() === '') {
+                        // spazio o newline -> semplicemente aggiungilo come nodo di testo
+                        const textNode = document.createTextNode(token);
+  
+                        element.appendChild(textNode);
+                    } else {
+                        const span = document.createElement('span');
+                        span.className = 'word';
+   
+                        span.textContent = token;
+                        element.appendChild(span);
+                        spans.push(span);
+                    }
+                }
+                // sequentially show spans
+                let idx = 0;
+                function showNext() {
+                    let shown = 0;
+                    while (shown < wordsPerStep && idx < spans.length) {
+                        const s = spans[idx];
+                        // forza reflow per assicurare la transizione
+                        requestAnimationFrame(() => {
+                            s.classList.add('show');
+                        });
+                        idx++;
+                        shown++;
+                    }
+                    if (idx < spans.length) {
+                        setTimeout(showNext, delay);
+                    } else {
+                        // fine digitazione;
+                        // lascia piccolo delay prima di risolvere
+                        setTimeout(resolve, 120);
+                    }
+                }
+                // avviare con un micro timeout per far partire le transizioni
+                setTimeout(showNext, 20);
+            });
+        }
+        
+        async function sendMessage() {
+            if (isProcessing) return;
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            const files = [...attachedFiles];
+            
+            if (!message && files.length === 0) return;
+            isProcessing = true;
+            setInputEnabled(false);
+            
+            let userContentHtml = message;
+            if (files.length > 0) {
+                const filePreviews = files.map(file => {
+                    const icon = file.type.startsWith('image/') ? '🖼️' : '📄';
+                    return `<p style="margin: 2px 0; font-size: 0.9em;">${icon} Allegato: ${file.name}</p>`;
+            
+                }).join('');
+                userContentHtml = `${message ? message + '<br>' : ''}${filePreviews}`;
+            }
+
+            appendMessage('user', userContentHtml);
+            chats[currentChatIndex].push({ role: 'user', content: message });
+            input.value = '';
+            document.getElementById('fileInput').value = '';
+            attachedFiles = [];
+            document.getElementById('filePreviewContainer').classList.remove('visible');
+            loadingMessageElement = appendMessage('bot', '🧠 Nyra sta pensando...');
+            scrollToBottom();
+            try {
+                // ========= INIZIO LOGICA FINALE E CORRETTA - CHIAMATA AL TUO SERVER =========
+                
+                // Prepara il payload da inviare al tuo server
+                const payload = {
+                    message: message,
+                    history: chats[currentChatIndex].slice(0, -1), // invia la cronologia senza l'ultimo messaggio dell'utente
+                    files: []
+                };
+
+                // Leggi i file in base64
+                for (const file of files) {
+                    const base64Content = await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve(reader.result);
+                        reader.onerror = error => reject(error);
+                        reader.readAsDataURL(file);
+                    });
+                    payload.files.push({
+                        name: file.name,
+                        type: file.type,
+                        content: base64Content
+                    });
+                }
+
+                const res = await fetch("https://api.nyra.aurastudioitalia.it/nyra", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await res.json();
+                
+                if (!res.ok) {
+                    const errorMessage = data.error || "Risposta non valida dal server.";
+                    console.error('Errore dal tuo server API:', res.status, data);
+                    throw new Error(`Errore API: ${res.status} - ${errorMessage}`);
+                }
+                
+                const botMessage = data.reply?.trim() || "Errore: Risposta non valida dalla AI.";
+                
+                // Mostra la risposta parola per parola (dissolvenza)
+                if (loadingMessageElement) {
+                    let plainText = botMessage.replace(/\n{3,}/g, '\n\n');
+                    await typeOutByWord(loadingMessageElement, plainText, { wordsPerStep: 1, delay: 55 });
+                    const messageBlockOfLoading = loadingMessageElement.closest('.message-block');
+                    if (messageBlockOfLoading) {
+                        addActionButtons(messageBlockOfLoading);
+                    }
+                }
+
+                // Salva la risposta nella cronologia (testo semplice)
+                chats[currentChatIndex].push({ role: 'assistant', content: botMessage });
+                scrollToBottom();
+                saveChats();
+                updateChatList();
+
+            } catch (error) {
+                console.error('Errore durante la richiesta API:', error);
+                if (loadingMessageElement) {
+                    loadingMessageElement.textContent = `Errore: Impossibile ottenere risposta. (${error.message || 'Errore sconosciuto'})`;
+                }
+                chats[currentChatIndex].pop();
+                saveChats();
+
+            } finally {
+                loadingMessageElement = null;
+                isProcessing = false;
+                setInputEnabled(true);
+            }
+        }
+        // ========= FINE LOGICA FINALE E CORRETTA =========
+
+
+        function startBackgroundFadeIn() {
+            const effectElement = document.getElementById('colorBackgroundEffect');
+            if (effectElement) {
+                effectElement.classList.add('fade-in');
+            }
+        }
+
+        function showWhatsappPopup() {
+            const popupOverlay = document.getElementById('whatsappPopupOverlay');
+            popupOverlay.classList.add('show');
+        }
+
+        function closeWhatsappPopup() {
+            const popupOverlay = document.getElementById('whatsappPopupOverlay');
+            popupOverlay.classList.remove('show');
+            localStorage.setItem('nyraWhatsappPopupShown', 'true');
+        }
+
+        // Funzioni per il popup d'avviso (terapia)
+        function showWarningPopup() {
+            const overlay = document.getElementById('warningPopupOverlay');
+            overlay.classList.add('show');
+            overlay.setAttribute('aria-hidden', 'false');
+        }
+        function closeWarningPopup() {
+            const overlay = document.getElementById('warningPopupOverlay');
+            overlay.classList.remove('show');
+            overlay.setAttribute('aria-hidden', 'true');
+            localStorage.setItem('nyraWarningPopupShown', 'true');
+        }
+
+        window.onload = () => {
+            loadChats();
+            startBackgroundFadeIn();
+            if (!localStorage.getItem('nyraWhatsappPopupShown')) {
+                showWhatsappPopup();
+            }
+            // Mostra il popup d'avviso la prima volta (stessa logica del whatsapp popup)
+            if (!localStorage.getItem('nyraWarningPopupShown')) {
+                // mostralo dopo un piccolo delay per non sovrapporre le animazioni
+                setTimeout(() => {
+                    showWarningPopup();
+                }, 600);
+            }
+        };
+    </script>
+</body>
+  </html>
