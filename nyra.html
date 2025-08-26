@@ -8,6 +8,11 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <style>
+        /* FIX: Aggiunto smooth scroll a tutta la pagina per una migliore esperienza utente */
+        html, body {
+            scroll-behavior: smooth;
+        }
+
         body {
             margin: 0;
             padding: 0;
@@ -1341,7 +1346,6 @@
 
                 // Salva la risposta nella cronologia (testo semplice)
                 chats[currentChatIndex].push({ role: 'assistant', content: botMessage });
-                scrollToBottom();
                 saveChats();
                 updateChatList();
 
@@ -1358,6 +1362,8 @@
                 loadingMessageElement = null;
                 isProcessing = false;
                 setInputEnabled(true);
+                // FIX: Assicurati di scorrere fino in fondo DOPO aver terminato l'elaborazione e il rendering della risposta
+                scrollToBottom();
             }
         }
         // ========= FINE LOGICA FINALE E CORRETTA =========
@@ -1411,9 +1417,10 @@
 
         // FIX: Nuovo evento per gestire la tastiera su dispositivi mobili
         document.getElementById('userInput').addEventListener('focus', () => {
+            // Un breve timeout per permettere alla tastiera di apparire prima di forzare lo scroll
             setTimeout(() => {
                 scrollToBottom();
-            }, 300); // Piccolo ritardo per dare il tempo alla tastiera di apparire
+            }, 100); 
         });
 
     </script>
