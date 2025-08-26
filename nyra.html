@@ -8,13 +8,6 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <style>
-        /* FIX: Aggiunto scroll-behavior: smooth a tutta la pagina per una migliore esperienza utente */
-        html, body {
-            height: 100%; /* FIX: Importante per evitare problemi di overflow */
-            overflow: hidden; /* FIX: Evita scorrimento non voluto della pagina principale */
-            scroll-behavior: smooth;
-        }
-        
         body {
             margin: 0;
             padding: 0;
@@ -24,6 +17,7 @@
             flex-direction: column;
             height: 100vh;
             color: #e2e2e2;
+            overflow: hidden;
         }
 
         .file-upload-label {
@@ -104,7 +98,7 @@
                 circle at 50% 120%, 
                 rgba(255, 0, 255, 1) 0%,   /* Magenta */
                 rgba(142, 45, 226, 1) 50%,  /* Viola */
-                rgba(0, 191, 255, 1) 100%  
+                rgba(0, 191, 255, 1) 100%   /* Azzurro */
             );
             transparent 100%
             );
@@ -313,6 +307,13 @@
             background-color: #262626;
         }
 
+        #sidebar li .chat-title-text {
+            flex-grow: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
         .chat-container {
             flex: 1;
             overflow-y: auto;
@@ -322,7 +323,7 @@
             gap: 8px;
             padding-bottom: 80px;
         }
-        
+
         .message-block {
             display: flex;
             flex-direction: column;
@@ -425,10 +426,8 @@
             width: 100%;
             box-sizing: border-box;
             border-top: 1px solid #1a1a1a;
-            /* FIX: Aggiunta questa regola per evitare che l'area di input vada sotto la tastiera */
-            padding-bottom: env(safe-area-inset-bottom);
         }
-        
+
         .input-controls {
             display: flex;
             align-items: center;
@@ -730,9 +729,8 @@
     <div class="whatsapp-popup-overlay" id="whatsappPopupOverlay">
         <div class="whatsapp-popup">
             <h2>Abbiamo aperto il canale WhatsApp di Nyra!</h2>
-            <p>Unisciti per le news, sondaggi, anteprime e forse regali.. 👀</p>
+            <p>Unisciti per le news, sondaggi, anteprime e forse regali.. ðŸ‘€</p>
             <div class="whatsapp-popup-buttons">
-               
                 <button class="close-button" onclick="closeWhatsappPopup()">Chiudi</button>
                 <a href="https://whatsapp.com/channel/0029Vb62kCUBvvsoDtruRy28" target="_blank" class="join-button">Unisciti</a>
             </div>
@@ -743,12 +741,11 @@
         <div class="warning-popup" role="dialog" aria-labelledby="warningTitle">
             <h2 id="warningTitle">Avviso importante</h2>
             <p>
-          
-                Nyra non è una terapeuta né un sostituto del supporto umano professionale.
+                Nyra non Ã¨ una terapeuta nÃ© un sostituto del supporto umano professionale.
                 Se stai affrontando pensieri di autolesionismo, crisi o emergenze emotive, ti invitiamo a rivolgerti a un professionista sanitario o a un servizio di emergenza locale.
             </p>
             <p>
-                Nyra può commettere errori — per informazioni importanti verifica sempre la fonte e, se necessario, consulta professionisti qualificati.
+                Nyra puÃ² commettere errori â€” per informazioni importanti verifica sempre la fonte e, se necessario, consulta professionisti qualificati.
             </p>
             <div class="warning-buttons">
                 <button class="ack-button" onclick="closeWarningPopup()">Ho capito</button>
@@ -767,8 +764,7 @@
                 <span id="selectedModelName">GPT 5 Nano</span> <i class="material-icons">keyboard_arrow_down</i>
             </div>
             <div id="modelDropdown">
-                <p>Scegli 
-                il tuo modello</p>
+                <p>Scegli il tuo modello</p>
                 <ul>
                     <li data-model="openai/gpt-5-nano" onclick="selectModel('GPT 5 Nano', 'openai/gpt-5-nano')">GPT 5 Nano</li>
                 </ul>
@@ -777,8 +773,7 @@
     </header>
 
     <div id="sidebar">
-        <a id="settingsLink" 
-        href="settings.html" class="sidebar-button">
+        <a id="settingsLink" href="settings.html" class="sidebar-button">
             <span class="material-symbols-outlined">settings</span>
             Impostazioni
         </a>
@@ -790,7 +785,6 @@
     </div>
 
     <div class="chat-container" id="chatContainer">
-  
         <div class="welcome-container" 
         id="welcomeMessage">
             <h1>GPT-5 su Nyra</h1>
@@ -802,14 +796,12 @@
         <div id="filePreviewContainer"></div>
         <div class="input-controls">
             <label for="fileInput" class="file-upload-label">
- 
                 <i 
                 class="material-icons">attach_file</i>
             </label>
             <input type="file" id="fileInput" multiple accept="image/*,.txt,.csv,.md,.pdf">
             <input type="text" id="userInput" placeholder="Invia un messaggio..." onkeydown=" if(event.key === 'Enter') sendMessage()">
             <button id="sendButton" class="icon-button highlight" onclick="sendMessage()"><i class="material-icons">send</i></button>
- 
         </div>
     </div>
 
@@ -907,16 +899,15 @@
                     <span class="chat-title-text">${chatTitle}</span>
                 `;
                 
-          
+            
                 li.onclick = () => {
-                    // PULIZIA: se la chat corrente è vuota -> rimuovila prima di cambiare
+                    // PULIZIA: se la chat corrente Ã¨ vuota -> rimuovila prima di cambiare
                     const oldIndex = currentChatIndex;
-                    if (typeof oldIndex 
-                    === 'number' && chats[oldIndex] && chats[oldIndex].length === 0 && oldIndex !== originalIndex) {
+                    if (typeof oldIndex === 'number' && chats[oldIndex] && chats[oldIndex].length === 0 && oldIndex !== originalIndex) {
   
                         // rimuovi la chat vuota
                         chats.splice(oldIndex, 1);
-                        // se la chat rimossa è prima dell'indice target, l'indice target diminuisce
+                        // se la chat rimossa Ã¨ prima dell'indice target, l'indice target diminuisce
               
                         if (oldIndex < originalIndex) {
                             currentChatIndex = originalIndex - 1;
@@ -1026,7 +1017,7 @@
                     button.innerHTML = '<i class="material-icons">check</i> Segnalato!';
                 } else {
                     button.innerHTML = '<i class="material-icons">error</i> Errore';
-                    console.error('La segnalazione è fallita con stato:', response.status);
+                    console.error('La segnalazione Ã¨ fallita con stato:', response.status);
                 }
             } catch (err) {
                 console.error("Errore durante l'invio della segnalazione:", err);
@@ -1076,7 +1067,7 @@
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${role}`;
             // nota: per i messaggi del bot USER-CREATED (non caricamento) usiamo parsed markdown
-            if ((role === 'bot' || role === 'assistant') && content.trim() !== '🧠 Nyra sta pensando...') {
+            if ((role === 'bot' || role === 'assistant') && content.trim() !== 'ðŸ§  Nyra sta pensando...') {
                 // se il messaggio proviene dalla cronologia, mostrane il contenuto (render markdown)
                 try {
          
@@ -1095,8 +1086,8 @@
 
             messageBlock.appendChild(messageDiv);
             chat.appendChild(messageBlock);
-            // Se è un messaggio del bot (non di caricamento), aggiungi i pulsanti di azione
-            if ((role === 'bot' || role === 'assistant') && content.trim() !== '🧠 Nyra sta pensando...') {
+            // Se Ã¨ un messaggio del bot (non di caricamento), aggiungi i pulsanti di azione
+            if ((role === 'bot' || role === 'assistant') && content.trim() !== 'ðŸ§  Nyra sta pensando...') {
                 addActionButtons(messageBlock);
             }
 
@@ -1107,11 +1098,8 @@
         }
         
         function scrollToBottom() {
-            // FIX DEFINITIVO: usa requestAnimationFrame per assicurare che il DOM sia aggiornato prima dello scroll
-            requestAnimationFrame(() => {
-                const chat = document.getElementById('chatContainer');
-                chat.scrollTop = chat.scrollHeight;
-            });
+            const chat = document.getElementById('chatContainer');
+            chat.scrollTop = chat.scrollHeight;
         }
 
         function removeFile(file) {
@@ -1138,17 +1126,15 @@
                     removeButton.textContent = 'x';
                     removeButton.onclick = (event) => {
                         event.stopPropagation();
-        
+                  
                         removeFile(file);
                     };
                     
                     if (file.type.startsWith('image/')) {
-    
                         const reader = new FileReader();
     
                         reader.onload = e => {
                             const img = document.createElement('img');
-             
                             img.src = e.target.result;
                
                             previewDiv.appendChild(img);
@@ -1192,30 +1178,25 @@
         function typeOutByWord(element, text, options = {}) {
             const wordsPerStep = 
             options.wordsPerStep || 1;
-            const delay = options.delay ||
-            60; // ms per step
+            const delay = options.delay || 60; // ms per step
             return new Promise((resolve) => {
                 // pulisci contenuto
                 element.innerHTML = '';
                 // split preservando spazi multipli e newline: usiamo regex che cattura parole e spazi
        
-        
                 const tokens = text.split(/(\s+)/); // include spazi come tokens
                 // Creiamo uno span per ogni token non-spazio, e testo normale per gli spazi
                 const spans = [];
                 for (let i = 0; i < tokens.length; i++) {
           
- 
                     const token = tokens[i];
                     if (token.trim() === '') {
                         // spazio o newline -> semplicemente aggiungilo come nodo di testo
-                    
                         const textNode = document.createTextNode(token);
   
                         element.appendChild(textNode);
                     } else {
                         const span = document.createElement('span');
-                  
                         span.className = 'word';
    
                         span.textContent = token;
@@ -1262,7 +1243,7 @@
             let userContentHtml = message;
             if (files.length > 0) {
                 const filePreviews = files.map(file => {
-                    const icon = file.type.startsWith('image/') ? '🖼️' : '📄';
+                    const icon = file.type.startsWith('image/') ? 'ðŸ–¼ï¸' : 'ðŸ“„';
                     return `<p style="margin: 2px 0; font-size: 0.9em;">${icon} Allegato: ${file.name}</p>`;
             
                 }).join('');
@@ -1275,23 +1256,22 @@
             document.getElementById('fileInput').value = '';
             attachedFiles = [];
             document.getElementById('filePreviewContainer').classList.remove('visible');
-            loadingMessageElement = appendMessage('bot', '🧠 Nyra sta pensando...');
+            loadingMessageElement = appendMessage('bot', 'ðŸ§  Nyra sta pensando...');
             scrollToBottom();
             try {
                 // ========= INIZIO LOGICA FINALE E CORRETTA - CHIAMATA AL TUO SERVER =========
                 
                 // Prepara il payload da inviare al tuo server
                 const payload = {
-    
                     message: message,
                     history: chats[currentChatIndex].slice(0, -1), // invia la cronologia senza l'ultimo messaggio dell'utente
                     files: []
                 };
+
                 // Leggi i file in base64
                 for (const file of files) {
                     const base64Content = await new Promise((resolve, reject) => {
                         const reader = new FileReader();
-                  
                         reader.onload = () => resolve(reader.result);
                         reader.onerror = error => reject(error);
                         reader.readAsDataURL(file);
@@ -1307,21 +1287,19 @@
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-            
                     },
                     body: JSON.stringify(payload)
                 });
+                
                 const data = await res.json();
                 
                 if (!res.ok) {
-                    const errorMessage = data.error ||
-                    "Risposta non valida dal server.";
+                    const errorMessage = data.error || "Risposta non valida dal server.";
                     console.error('Errore dal tuo server API:', res.status, data);
                     throw new Error(`Errore API: ${res.status} - ${errorMessage}`);
                 }
                 
-                const botMessage = data.reply?.trim() ||
-                "Errore: Risposta non valida dalla AI.";
+                const botMessage = data.reply?.trim() || "Errore: Risposta non valida dalla AI.";
                 
                 // Mostra la risposta parola per parola (dissolvenza)
                 if (loadingMessageElement) {
@@ -1335,14 +1313,14 @@
 
                 // Salva la risposta nella cronologia (testo semplice)
                 chats[currentChatIndex].push({ role: 'assistant', content: botMessage });
+                scrollToBottom();
                 saveChats();
                 updateChatList();
 
             } catch (error) {
                 console.error('Errore durante la richiesta API:', error);
                 if (loadingMessageElement) {
-                    loadingMessageElement.textContent = `Errore: Impossibile ottenere risposta.
-                    (${error.message || 'Errore sconosciuto'})`;
+                    loadingMessageElement.textContent = `Errore: Impossibile ottenere risposta. (${error.message || 'Errore sconosciuto'})`;
                 }
                 chats[currentChatIndex].pop();
                 saveChats();
@@ -1351,11 +1329,10 @@
                 loadingMessageElement = null;
                 isProcessing = false;
                 setInputEnabled(true);
-                // FIX: Assicurati di scorrere fino in fondo DOPO aver terminato l'elaborazione e il rendering della risposta
-                scrollToBottom();
             }
         }
         // ========= FINE LOGICA FINALE E CORRETTA =========
+
 
         function startBackgroundFadeIn() {
             const effectElement = document.getElementById('colorBackgroundEffect');
@@ -1398,29 +1375,10 @@
             if (!localStorage.getItem('nyraWarningPopupShown')) {
                 // mostralo dopo un piccolo delay per non sovrapporre le animazioni
                 setTimeout(() => {
-                  
                     showWarningPopup();
                 }, 600);
             }
         };
-
-        // FIX: La risoluzione definitiva al problema della tastiera che copre l'input
-        document.getElementById('userInput').addEventListener('focus', () => {
-            const inputArea = document.querySelector('.input-area');
-            requestAnimationFrame(() => {
-                const rect = inputArea.getBoundingClientRect();
-                const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-                const distanceToBottom = viewportHeight - rect.bottom;
-                
-                if (distanceToBottom < 0) {
-                    window.scrollBy({
-                        top: -distanceToBottom,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
     </script>
 </body>
-</html>
+    </html>
