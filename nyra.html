@@ -8,11 +8,13 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <style>
-        /* FIX: Aggiunto smooth scroll a tutta la pagina per una migliore esperienza utente */
+        /* FIX: Aggiunto scroll-behavior: smooth a tutta la pagina per una migliore esperienza utente */
         html, body {
+            height: 100%; /* FIX: Importante per evitare problemi di overflow */
+            overflow: hidden; /* FIX: Evita scorrimento non voluto della pagina principale */
             scroll-behavior: smooth;
         }
-
+        
         body {
             margin: 0;
             padding: 0;
@@ -22,7 +24,6 @@
             flex-direction: column;
             height: 100vh;
             color: #e2e2e2;
-            overflow: hidden;
         }
 
         .file-upload-label {
@@ -319,14 +320,8 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
-            padding-bottom: 80px;
         }
         
-        /* FIX: Aggiunto padding-bottom per evitare che l'ultimo messaggio sia coperto dall'input. */
-        .chat-container {
-            padding-bottom: calc(15px + 80px); 
-        }
-
         .message-block {
             display: flex;
             flex-direction: column;
@@ -429,20 +424,10 @@
             width: 100%;
             box-sizing: border-box;
             border-top: 1px solid #1a1a1a;
+            /* FIX: Aggiunta questa regola per evitare che l'area di input vada sotto la tastiera */
+            padding-bottom: env(safe-area-inset-bottom);
         }
         
-        /* FIX: Usiamo un approccio diverso per l'area di input per evitare problemi con la tastiera su iOS */
-        @media (max-width: 600px) {
-            .input-area {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                width: auto;
-                padding-bottom: env(safe-area-inset-bottom);
-            }
-        }
-
         .input-controls {
             display: flex;
             align-items: center;
@@ -1121,8 +1106,11 @@
         }
         
         function scrollToBottom() {
-            const chat = document.getElementById('chatContainer');
-            chat.scrollTop = chat.scrollHeight;
+            // FIX DEFINITIVO: usa requestAnimationFrame per assicurare che il DOM sia aggiornato prima dello scroll
+            requestAnimationFrame(() => {
+                const chat = document.getElementById('chatContainer');
+                chat.scrollTop = chat.scrollHeight;
+            });
         }
 
         function removeFile(file) {
@@ -1415,12 +1403,21 @@
             }
         };
 
-        // FIX: Nuovo evento per gestire la tastiera su dispositivi mobili
+        // FIX: La risoluzione definitiva al problema della tastiera che copre l'input
         document.getElementById('userInput').addEventListener('focus', () => {
-            // Un breve timeout per permettere alla tastiera di apparire prima di forzare lo scroll
-            setTimeout(() => {
-                scrollToBottom();
-            }, 100); 
+            const inputArea = document.querySelector('.input-area');
+            requestAnimationFrame(() => {
+                const rect = inputArea.getBoundingClientRect();
+                const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+                const distanceToBottom = viewportHeight - rect.bottom;
+                
+                if (distanceToBottom < 0) {
+                    window.scrollBy({
+                        top: -distanceToBottom,
+                        behavior: 'smooth'
+                    });
+                }
+            });
         });
 
     </script>
